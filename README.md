@@ -1,11 +1,47 @@
 # frp-update-center
 
-Frp update center
+frp-update-center is a Python-based update center for frp, a fast reverse proxy written in Python. This update center provides the latest version of frp and its components for different platforms and architectures, and allows users to download them easily.
 
-编写python3的API，监听65527端口，每隔5分钟检查一次<https://github.com/fatedier/frp>是否发布了新版本，如果发布则下载最新版releases中的各个文件保存到/data/frp/\<version>/文件夹中（如果不存在则创建）。实现/frpc/info接口，根据URL参数中的操作系统和架构返回/data/frp/中最新的version的版本号以及github中对应版本的下载地址，实现/frpc/download接口，根据URL参数中的操作系统和架构再根据/data/frp/中最新的version的版本号代理github中对应版本的下载地址返回文件数据流。
+## Installation
 
-请你给上面的代码增加功能但不得重构代码。需要增加：
-1、如果下载成功后，根据文件夹中的“frp_sha256_checksums.txt”检查文件的sha256是否匹配并对不匹配的文件重新下载。
-2、每次启动程序后遍历/data/frp目录下的文件，找出最新版本号并赋值给全局变量version
+To install frp-update-center, clone this repository to your local machine:
 
-pm2 start main.py --interpreter=python3 --name frp
+```shell
+git clone https://github.com/yourusername/frp-update-center.git
+cd frp-update-center
+```
+
+Then, install the dependencies using pip:
+
+```
+pip install -r requirements.txt
+```
+
+## Usage
+
+To start the update center, run the main.py script:
+
+```
+python3 main.py
+```
+
+This will start a Flask web server at <http://localhost:65527>, which serves the following endpoints:
+
+`/frpc/info`: Returns the latest version of frpc and its download URL for a given operating system and architecture.  
+`/frpc/download`: Downloads the latest version of frpc for a given operating system and architecture.
+To use the update center, you can send HTTP requests to these endpoints using a web browser or a command-line tool like curl. For example, to get the latest version of frpc for Linux AMD64, you can send a GET request to `http://localhost:65527/frpc/info?os_type=linux&arch=amd64`, which will return a JSON object like this:
+
+```json
+{
+    "version": "0.37.1",
+    "download_url": "https://github.com/fatedier/frp/releases/download/v0.37.1/frpc_linux_amd64.tar.gz"
+}
+```
+
+To download the latest version of frpc for Linux AMD64, you can send a GET request to `http://localhost:65527/frpc/download?os_type=linux&arch=amd64`, which will download the file to your local machine.
+
+The production environment is recommended to use pm2: `pm2 start main.py --interpreter=python3 --name frp-update-center`.
+
+## License
+
+frp-update-center is licensed under the [MIT License](LICENSE).

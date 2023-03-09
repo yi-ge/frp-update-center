@@ -11,12 +11,14 @@ import multiprocessing as mp
 
 app = Flask(__name__)
 
-# 使用共享内存创建全局变量
+# Creating global variables using shared memory
 manager = mp.Manager()
 version = manager.Value('i', None)
 download_urls = manager.dict()
 
 
+# Check for a new version of frp and update the download URLs if a new version
+# is found. Returns True if a new version is found and False otherwise.
 def check_for_updates():
     global version, download_urls
     r = requests.get(
@@ -35,6 +37,7 @@ def check_for_updates():
     return True
 
 
+# Download the latest files from the github
 def download_latest_files():
     global version, download_urls
     if not version.value or not download_urls:
@@ -50,7 +53,7 @@ def download_latest_files():
             for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
 
-    # 计算 sha256 值并与校验文件中的值进行比较
+    # Calculates sha256 values and compares them to the values in the checksum file
     for filename, url in download_urls.items():
         file_path = os.path.join(base_dir, filename)
         with open(file_path, 'rb') as f:
@@ -80,7 +83,6 @@ def frpc_info():
     if not version.value or not download_urls:
         return "No version or download URLs available", 404
 
-    # 使用startswith()方法来判断键是否以frpc_{version}_{os_type}_{arch}开头
     for key in download_urls.keys():
         if key.startswith(f"frp_{version.value}_{os_type}_{arch}"):
             return {
@@ -99,7 +101,6 @@ def frpc_download():
     if not version.value or not download_urls:
         return "No version or download URLs available", 404
 
-    # 使用startswith()方法来判断键是否以frpc_{version}_{os_type}_{arch}开头
     for key in download_urls.keys():
         if key.startswith(f"frp_{version.value}_{os_type}_{arch}"):
             file_path = os.path.join('/data/frp', version.value, key)
@@ -140,6 +141,5 @@ if __name__ == '__main__':
     thread = threading.Thread(target=check_and_download_files)
     thread.start()
 
-    # 使用pywsgi启动Flask应用程序
     server = pywsgi.WSGIServer(('0.0.0.0', 65527), app)
     server.serve_forever()
