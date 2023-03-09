@@ -1,6 +1,6 @@
 # frp-update-center
 
-frp-update-center is a Python-based update center for frp, a fast reverse proxy written in Python. This update center provides the latest version of frp and its components for different platforms and architectures, and allows users to download them easily.
+frp-update-center is a Python-based update center for [frp](https://github.com/fatedier/frp), a fast reverse proxy written in Go. This update center provides the latest version of frp and its components for different platforms and architectures, and allows users to download them easily.
 
 ## Installation
 
