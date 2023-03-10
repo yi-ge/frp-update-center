@@ -41,7 +41,7 @@ def check_for_updates():
 def download_files(version):
     global download_urls_by_version
     if version not in download_urls_by_version:
-        return
+        return False
     base_dir = os.path.join('/data/frp', version)
     os.makedirs(base_dir, exist_ok=True)
     for filename, url in download_urls_by_version[version].items():
@@ -70,10 +70,10 @@ def download_files(version):
                             f"SHA256 hash mismatch: {expected_sha256_value} (expected) vs {sha256_value}"
                         )
                         os.remove(file_path)
-                        download_files(version)
-                        return
+                        return False
                     print(f'{filename} SHA256 hash mismatch: ok')
                     break
+    return True
 
 
 @app.route('/frpc/info')
@@ -86,7 +86,15 @@ def frpc_info():
     if not version:
         version = max(download_urls_by_version.keys())
     if version not in download_urls_by_version:
-        return f"No information found for version {version}", 404
+        r = requests.get(
+            f'https://api.github.com/repos/fatedier/frp/releases/tags/v{version}'
+        )
+        if r.status_code != 200:
+            return f"No information found for version {version}", 404
+        download_urls = {}
+        for asset in r.json()['assets']:
+            download_urls[asset['name']] = asset['browser_download_url']
+        download_urls_by_version[version] = download_urls
 
     for key in download_urls_by_version[version].keys():
         if key.startswith(f"frp_{version}_{os_type}_{arch}"):
@@ -107,13 +115,22 @@ def frpc_download():
     if not version:
         version = max(download_urls_by_version.keys())
     if version not in download_urls_by_version:
-        return f"No download available for version {version}", 404
+        r = requests.get(
+            f'https://api.github.com/repos/fatedier/frp/releases/tags/v{version}'
+        )
+        if r.status_code != 200:
+            return f"No downloadavailable for version {version}", 404
+        download_urls = {}
+        for asset in r.json()['assets']:
+            download_urls[asset['name']] = asset['browser_download_url']
+        download_urls_by_version[version] = download_urls
 
     for key in download_urls_by_version[version].keys():
         if key.startswith(f"frp_{version}_{os_type}_{arch}"):
             file_path = os.path.join('/data/frp', version, key)
             if not os.path.isfile(file_path):
-                return f"File {key} not found for version {version}", 404
+                if not download_files(version):
+                    return f"File {key} not found for version {version} and failed to download it.", 404
             return send_file(file_path, as_attachment=True)
     return f"No download available for version {version}", 404
 
