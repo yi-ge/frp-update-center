@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["frpc", "gevent", "pywsgi", "werkzeug"]
+  "cSpell.words": ["frpc", "gevent", "pywsgi", "werkzeug"],
+  "python.formatting.provider": "yapf"
 }
