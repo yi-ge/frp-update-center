@@ -39,7 +39,7 @@ The version parameter in these endpoints is optional. If it is not specified, th
 }
 ```
 
-To download the latest version of frpc for Linux AMD64 for version 0.37.1, you can send a GET request to `http://localhost:65527/frpc/download?os_type=linux&arch=amd64&version=0.37.1`, which will download the file to your local machine.
+To download the latest version of frpc for Linux AMD64 you can send a GET request to `http://localhost:65527/frpc/download?os_type=linux&arch=amd64`, which will download the file to your local machine.
 
 The production environment is recommended to use pm2: `pm2 start main.py --interpreter=python3 --name frp-update-center`.
 
