@@ -29,7 +29,8 @@ This will start a Flask web server at <http://localhost:65527>, which serves the
 
 `/frpc/info`: Returns the latest version of frpc and its download URL for a given operating system and architecture.  
 `/frpc/download`: Downloads the latest version of frpc for a given operating system and architecture.
-To use the update center, you can send HTTP requests to these endpoints using a web browser or a command-line tool like curl. For example, to get the latest version of frpc for Linux AMD64, you can send a GET request to `http://localhost:65527/frpc/info?os_type=linux&arch=amd64`, which will return a JSON object like this:
+
+The version parameter in these endpoints is optional. If it is not specified, the latest version of frp will be used. To get information about a specific version of frp, you can include the version parameter in your request. For example, to get the latest version of frpc for Linux AMD64 for version 0.37.1, you can send a GET request to <http://localhost:65527/frpc/info?os_type=linux&arch=amd64&version=0.37.1>, which will return a JSON object like this:
 
 ```json
 {
@@ -38,7 +39,7 @@ To use the update center, you can send HTTP requests to these endpoints using a 
 }
 ```
 
-To download the latest version of frpc for Linux AMD64, you can send a GET request to `http://localhost:65527/frpc/download?os_type=linux&arch=amd64`, which will download the file to your local machine.
+To download the latest version of frpc for Linux AMD64 for version 0.37.1, you can send a GET request to `http://localhost:65527/frpc/download?os_type=linux&arch=amd64&version=0.37.1`, which will download the file to your local machine.
 
 The production environment is recommended to use pm2: `pm2 start main.py --interpreter=python3 --name frp-update-center`.
 
