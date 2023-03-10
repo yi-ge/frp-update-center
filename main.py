@@ -76,8 +76,8 @@ def download_files(version):
     return True
 
 
-@app.route('/frpc/info')
-def frpc_info():
+@app.route('/frp/info')
+def frp_info():
     os_type = request.args.get('os_type')
     arch = request.args.get('arch')
     version = request.args.get('version')
@@ -105,8 +105,8 @@ def frpc_info():
     return f"No download URL found for version {version}", 404
 
 
-@app.route('/frpc/download')
-def frpc_download():
+@app.route('/frp/download')
+def frp_download():
     os_type = request.args.get('os_type')
     arch = request.args.get('arch')
     version = request.args.get('version')
