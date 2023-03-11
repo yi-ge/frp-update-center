@@ -30,7 +30,7 @@ This will start a Flask web server at <http://localhost:65527>, which serves the
 `/frp/info`: Returns the latest version of frp and its download URL for a given operating system and architecture.  
 `/frp/download`: Downloads the latest version of frp for a given operating system and architecture.
 
-The version parameter in these endpoints is optional. If it is not specified, the latest version of frp will be used. To get information about a specific version of frp, you can include the version parameter in your request. For example, to get the latest version of frp for Linux AMD64 for version 0.37.1, you can send a GET request to <http://localhost:65527/frp/info?os_type=linux&arch=amd64&version=0.37.1>, which will return a JSON object like this:
+The `version` parameter in these endpoints is optional. If it is not specified, the latest version of frp will be used. To get information about a specific version of frp, you can include the version parameter in your request. For example, to get the latest version of frp for Linux AMD64 for version 0.37.1, you can send a GET request to <http://localhost:65527/frp/info?os_type=linux&arch=amd64&version=0.37.1>, which will return a JSON object like this:
 
 ```json
 {
