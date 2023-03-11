@@ -7,7 +7,7 @@ frp-update-center is a Python-based update center for [frp](https://github.com/f
 To install frp-update-center, clone this repository to your local machine:
 
 ```shell
-git clone https://github.com/yourusername/frp-update-center.git
+git clone https://github.com/yi-ge/frp-update-center.git
 cd frp-update-center
 ```
 
